@@ -1,0 +1,61 @@
+server:
+  port: 8080
+
+
+fabric:
+  mspId: Org1MSP
+  certificatePath: src/main/resources/crypto-config/test-network/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+  privateKeyPath: src/main/resources/crypto-config/test-network/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
+  tlsCertPath: src/main/resources/crypto-config/test-network/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+  channel: mychannel
+
+logging:
+  level:
+    org:
+      hyperledger: trace
+
+
+spring:
+  application:
+    name: hyperledger-fabric-app-java-demo
+  servlet:
+    multipart:
+      # 最大文件大小
+      max-file-size: 10MB
+      # 最大请求大小
+      max-request-size: 10MB
+  # json序列化date类型时候防止出现 T
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/fabric_trce_java?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.jdbc.Driver  # mysql8.0 com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #   数据源其他配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.wzz.entity
+  configuration:
+    # 配置日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
